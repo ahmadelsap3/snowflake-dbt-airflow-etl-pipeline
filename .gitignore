@@ -1,0 +1,30 @@
+# dbt artifacts
+target/
+dbt_packages/
+logs/
+
+# Project directories (if you want to ignore them)
+dbt_snowflake_airflow_etl_pipeline/
+my_first_dbt_project/
+
+# VS Code settings
+.vscode/
+
+# Python virtual environment
+.venv/
+venv/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
