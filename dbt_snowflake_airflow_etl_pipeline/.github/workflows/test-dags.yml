@@ -1,0 +1,52 @@
+name: Test Airflow DAGs
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-dags:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Test DAG syntax
+      run: |
+        export AIRFLOW_HOME=${{ github.workspace }}/airflow_home
+        export AIRFLOW__CORE__DAGS_FOLDER=${{ github.workspace }}/dags
+        export AIRFLOW__CORE__LOAD_EXAMPLES=false
+        
+        mkdir -p $AIRFLOW_HOME
+        
+        # Initialize Airflow DB
+        airflow db init
+        
+        # Test DAG syntax
+        python -m py_compile dags/*.py
+        
+        # List DAGs
+        airflow dags list
+    
+    - name: Test dbt models
+      run: |
+        # Test dbt project structure
+        dbt deps --project-dir . || echo "No packages to install"
+        dbt parse --project-dir .
+        
+        # Test dbt compilation (without running against Snowflake)
+        # dbt compile --project-dir . || echo "Compile test completed"
+      env:
+        DBT_PROFILES_DIR: /dev/null  # Skip profiles for syntax check only

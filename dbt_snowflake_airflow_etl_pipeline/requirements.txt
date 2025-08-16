@@ -1,0 +1,14 @@
+# Apache Airflow
+apache-airflow==2.10.3
+apache-airflow-providers-snowflake==6.5.2
+apache-airflow-providers-postgres==5.13.3
+
+# dbt
+dbt-core==1.9.0
+dbt-snowflake==1.9.4
+
+# Other dependencies
+psycopg2-binary==2.9.9
+sqlalchemy==1.4.53
+requests==2.31.0
+pandas==2.2.2

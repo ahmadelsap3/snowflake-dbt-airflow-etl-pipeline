@@ -1,0 +1,66 @@
+# Docker Compose override for Windows with limited resources
+version: '3.8'
+
+x-airflow-common: &airflow-common-override
+  environment:
+    # Reduce resource usage for Windows
+    AIRFLOW__WEBSERVER__WORKERS: 1
+    AIRFLOW__WEBSERVER__WORKER_TIMEOUT: 600
+    AIRFLOW__WEBSERVER__WEB_SERVER_MASTER_TIMEOUT: 600
+    AIRFLOW__CELERY__WORKER_CONCURRENCY: 2
+    AIRFLOW__CORE__PARALLELISM: 4
+    AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG: 2
+    AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG: 1
+    # Disable unnecessary features
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
+    AIRFLOW__WEBSERVER__RBAC: 'false'
+
+services:
+  airflow-webserver:
+    <<: *airflow-common-override
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 30s
+      retries: 10
+      start_period: 300s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  airflow-scheduler:
+    <<: *airflow-common-override
+    healthcheck:
+      test: ["CMD", "airflow", "jobs", "check", "--job-type", "SchedulerJob", "--hostname", "$${HOSTNAME}"]
+      interval: 60s
+      timeout: 30s
+      retries: 10
+      start_period: 300s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  airflow-worker:
+    <<: *airflow-common-override
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  airflow-triggerer:
+    <<: *airflow-common-override
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
