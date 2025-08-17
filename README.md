@@ -8,6 +8,12 @@ Port Said Branch
 
 A complete modern data pipeline using dbt, Snowflake, and Apache Airflow for ETL orchestration, demonstrating advanced data warehouse concepts and lakehouse architecture patterns.
 
+##  System Architecture
+
+![Pipeline Architecture](screenshots/architecture.jpg)
+
+*Complete ETL pipeline architecture showing data flow from raw sources through transformation layers to business-ready analytics*
+
 ## 🚀 Quick Start with GitHub Codespaces
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ahmadelsap3/dbt-snowflake-airflow-etl-pipeline)
@@ -191,3 +197,7 @@ This pipeline processes e-commerce data to deliver:
 ---
 
 *This project demonstrates practical application of data warehousing concepts learned during the ITI Data Engineering program, showcasing industry-standard tools and best practices for modern data pipeline development.*
+
+
+
+
