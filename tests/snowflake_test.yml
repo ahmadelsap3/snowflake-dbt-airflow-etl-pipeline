@@ -1,14 +1,3 @@
 version: 2
 
-models:
-  - name: stg_orders
-    columns:
-      - name: order_status
-        tests:
-          - accepted_values:
-              values: ['Pending', 'Completed', 'Cancelled']
-  - name: stg_customers
-    columns:
-      - name: customer_id
-        tests:
-          - unique
+# Additional custom tests can go here

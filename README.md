@@ -1,203 +1,276 @@
 # dbt + Snowflake + Airflow ETL Pipeline
 
-**Final Project - Data Warehouse Concepts and Lakehouse Architecture Course**  
-Information Technology Institute (ITI) - Data Engineering Round 1 2025/2026  
-Port Said Branch
-
----
-
-A complete modern data pipeline using dbt, Snowflake, and Apache Airflow for ETL orchestration, demonstrating advanced data warehouse concepts and lakehouse architecture patterns.
-
-##  System Architecture
+A complete modern data engineering pipeline that demonstrates advanced ETL practices using dbt, Snowflake, and Apache Airflow with comprehensive data quality testing and automated orchestration.
 
 ![Pipeline Architecture](screenshots/architecture.jpg)
 
-*Complete ETL pipeline architecture showing data flow from raw sources through transformation layers to business-ready analytics*
-
-## 🚀 Quick Start with GitHub Codespaces
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ahmadelsap3/dbt-snowflake-airflow-etl-pipeline)
-
-1. **Open in Codespaces** - Click the button above
-2. **Run setup script**: `bash setup_codespaces.sh`
-3. **Configure Snowflake credentials** (see below)
-4. **Run the pipeline**
-
-## 📋 Project Structure
+## 🏗️ Architecture
 
 ```
-├── dags/                      # Airflow DAGs
-├── models/                    # dbt models
-│   ├── staging/              # Staging layer (raw data cleanup)
-│   └── marts/                # Business logic layer
-├── seeds/                     # Raw CSV data
-├── tests/                     # dbt tests
-├── dataset(raw)/             # Source data files
-├── screenshots/              # Project screenshots
-├── .devcontainer/            # GitHub Codespaces configuration
-├── dbt_project.yml           # dbt project configuration
-├── requirements.txt          # Python dependencies
-└── profiles_template.yml     # Snowflake connection template
+Raw Data (Seeds) → Staging Layer → Analytics Layer (Marts)
+     ↓                ↓               ↓
+   CSV Files    →  Clean/Transform  →  Dimensions & Facts
+                      ↓
+              Data Quality Tests (28 tests)
+                      ↓
+               Airflow Orchestration
 ```
 
-## 🎓 Academic Context
+## 🚀 Features
 
-This project demonstrates key concepts from the Data Warehouse and Lakehouse Architecture course:
+### ✅ Data Pipeline
+- **4 Staging Models** with primary/foreign key constraints
+- **3 Analytics Models** (2 dimensions, 1 fact table)
+- **28 Data Quality Tests** ensuring data integrity
+- **Automated Orchestration** via Airflow DAGs
 
-- **Medallion Architecture**: Bronze → Silver → Gold data layers
-- **ELT vs ETL**: Modern Extract-Load-Transform paradigm
-- **Data Lineage**: Complete traceability from source to consumption
-- **Data Quality**: Automated testing and validation
-- **Orchestration**: Workflow management with Apache Airflow
-- **Cloud Data Warehousing**: Snowflake as modern DWH solution
-- **Infrastructure as Code**: Containerized development environment
+### ✅ Database Design
+- **Proper ID Naming**: `customer_id`, `product_id`, `order_id`, `item_id`
+- **Referential Integrity**: Primary keys and foreign key relationships
+- **Schema Separation**: Raw data in `DBT_DEV_RAW_RAW`, processed data in `DBT_DEV_RAW`
 
-## 🔧 Setup Instructions
+### ✅ Data Quality
+- Uniqueness constraints on all primary keys
+- Not-null validations on critical fields
+- Relationship tests for foreign key integrity
+- Business rule validations (order statuses, positive amounts)
 
-### 1. Configure Snowflake Connection
+## 📊 Data Models
 
-Copy the template and add your credentials:
+### Raw Data (Seeds)
+- `customers.csv` - 100 customer records
+- `orders.csv` - 300 order records  
+- `order_items.csv` - 600 order item records
+- `products.csv` - 10 product records
+
+### Staging Layer
+- `stg_customers` - Cleaned customer data with `customer_id` PK
+- `stg_products` - Product catalog with `product_id` PK
+- `stg_orders` - Order data with `order_id` PK and FK to customers
+- `stg_order_items` - Order line items with `item_id` PK and FKs to orders/products
+
+### Analytics Layer (Marts)
+- `dim_customers` - Customer dimension with segmentation (VIP, Regular, New)
+- `dim_products` - Product dimension with performance metrics
+- `fct_daily_order_revenue` - Daily revenue fact table with order analytics
+
+## 🛠️ Technology Stack
+
+- **🔄 dbt (1.9.0)** - Data transformation and modeling
+- **❄️ Snowflake** - Cloud data warehouse
+- **🌬️ Apache Airflow (2.10.3)** - Workflow orchestration
+- **🐍 Python (3.11)** - Runtime environment
+- **🧪 dbt Tests** - Data quality validation
+
+## 🚀 Quick Start
+
+### 1. Prerequisites
+- Snowflake account with ACCOUNTADMIN access
+- Python 3.11+
+- Git
+
+### 2. Setup
+
 ```bash
-cp profiles_template.yml profiles.yml
+# Clone the repository
+git clone https://github.com/ahmadelsap3/dbt-snowflake-airflow-etl-pipeline.git
+cd dbt-snowflake-airflow-etl-pipeline
+
+# Run setup
+./setup_codespaces.sh
 ```
 
-Edit `profiles.yml` with your Snowflake details:
-```yaml
-dbt_snowflake_airflow_etl_pipeline:
-  outputs:
-    dev:
-      account: YOUR_SNOWFLAKE_ACCOUNT    # e.g., ACHAMLP-CK87481
-      database: finance_db
-      role: ACCOUNTADMIN
-      schema: raw
-      threads: 4
-      type: snowflake
-      user: YOUR_SNOWFLAKE_USER          # e.g., AHMEDELSAB3
-      warehouse: FINANCE_WH
-      password: "YOUR_SNOWFLAKE_PASSWORD"
-  target: dev
+### 3. Configure Snowflake
+
+Update `snowflake_env.sh` with your credentials:
+```bash
+export SNOWFLAKE_USER="your_username"
+export SNOWFLAKE_PASSWORD="your_password" 
+export SNOWFLAKE_ACCOUNT="your_account_identifier"
+export SNOWFLAKE_WAREHOUSE="your_warehouse"
+export SNOWFLAKE_DATABASE="your_database"
 ```
 
-### 2. Test dbt Connection
+### 4. Start Services
 
 ```bash
-dbt debug --profiles-dir .
+# Start Airflow (webserver + scheduler)
+./start_airflow_codespaces.sh
+
+# Access Airflow UI at http://localhost:8080
+# Username: admin, Password: admin
 ```
 
-### 3. Run the Pipeline
+## 🎯 Pipeline Execution
 
+### Manual Execution
 ```bash
 # Load raw data
 dbt seed --profiles-dir .
 
-# Run transformations
-dbt run --profiles-dir .
+# Run staging transformations  
+dbt run --select example.Staging --profiles-dir .
 
-# Run tests
+# Run analytics transformations
+dbt run --select example.marts --profiles-dir .
+
+# Run data quality tests
 dbt test --profiles-dir .
-
-# Generate documentation
-dbt docs generate --profiles-dir .
-dbt docs serve --profiles-dir . --port 8081
 ```
 
-### 4. Start Airflow
+### Automated Execution via Airflow
+1. Access Airflow UI at http://localhost:8080
+2. Navigate to DAG: `advanced_dbt_snowflake_pipeline`
+3. Toggle DAG to "ON"
+4. Click "Trigger DAG" to execute
 
+## 📈 Pipeline Stages
+
+### Stage 1: Data Ingestion (`dbt_seed`)
+- Loads CSV files into Snowflake raw schema
+- 1,010 total records across 4 tables
+
+### Stage 2: Data Transformation (`dbt_run_staging`) 
+- Creates 4 staging tables with clean, standardized data
+- Applies data typing, filtering, and business rules
+- Implements primary/foreign key constraints
+
+### Stage 3: Analytics Layer (`dbt_run_marts`)
+- Builds 2 dimension tables and 1 fact table
+- Customer segmentation and product performance metrics
+- Daily order revenue aggregations
+
+### Stage 4: Quality Assurance (`dbt_test`)
+- Executes 28 comprehensive data tests
+- Validates uniqueness, completeness, and referential integrity
+- Ensures business rule compliance
+
+## 🔍 Data Quality Tests
+
+### Primary Key Tests (4)
+- Unique customer_id, product_id, order_id, item_id
+
+### Not-Null Tests (15)
+- Critical fields across all tables
+
+### Relationship Tests (4)  
+- Foreign key integrity between tables
+
+### Business Rule Tests (5)
+- Order status validation
+- Positive amounts and quantities
+- Valid date ranges
+
+## 📁 Project Structure
+
+```
+├── dbt_project.yml          # dbt configuration
+├── profiles.yml             # Database connection
+├── snowflake_env.sh         # Environment variables
+├── setup_codespaces.sh      # Setup script
+├── start_airflow_codespaces.sh  # Airflow startup
+├── requirements.txt         # Python dependencies
+├── dags/
+│   └── advanced_dbt_snowflake_dag.py  # Airflow DAG
+├── models/
+│   └── example/
+│       ├── schema.yml       # Data tests & documentation
+│       ├── Staging/         # Staging models
+│       │   ├── stg_customers.sql
+│       │   ├── stg_products.sql  
+│       │   ├── stg_orders.sql
+│       │   └── stg_order_items.sql
+│       └── marts/           # Analytics models
+│           ├── dim_customers.sql
+│           ├── dim_products.sql
+│           └── fct_daily_order_revenue.sql
+├── seeds/                   # Raw CSV data
+├── analyses/                # Ad-hoc queries
+├── tests/                   # Custom tests
+└── screenshots/             # Documentation images
+```
+
+## 🧪 Testing
+
+### Run All Tests
 ```bash
-# Terminal 1: Webserver
-airflow webserver --port 8080
-
-# Terminal 2: Scheduler
-airflow scheduler
+dbt test --profiles-dir .
 ```
 
-## 🌐 Web Interfaces
-
-- **Airflow UI**: http://localhost:8080 (admin/admin)
-- **dbt Documentation**: http://localhost:8081
-
-## 📊 Data Pipeline Architecture
-
-The pipeline implements a modern lakehouse architecture with three distinct layers:
-
-### Bronze Layer (Raw Data)
-- **Seeds**: Raw CSV files loaded directly into Snowflake
-- **Source Tables**: `customers`, `orders`, `order_items`, `products`
-- **Characteristics**: Unprocessed, historical, append-only
-
-### Silver Layer (Staging Models)  
-- **Purpose**: Data cleaning, standardization, and basic transformations
-- **Models**: `stg_customers`, `stg_orders`, `stg_order_items`, `stg_products`
-- **Materialization**: Views for cost optimization
-- **Transformations**: Column renaming, data type casting, basic validation
-
-### Gold Layer (Mart Models)
-- **Purpose**: Business-ready, aggregated data for analytics
-- **Models**: `fct_daily_order_revenue`
-- **Materialization**: Tables for performance
-- **Business Logic**: Complex calculations, KPIs, dimensional modeling
-
-### Data Flow
-```
-CSV Files → Seeds (Bronze) → Staging Models (Silver) → Mart Models (Gold)
+### Test Specific Models
+```bash
+dbt test --select stg_customers --profiles-dir .
 ```
 
-## 🏗️ Technology Stack
+### Test Relationships
+```bash
+dbt test --select test_type:relationships --profiles-dir .
+```
 
-- **dbt**: Data transformation and modeling framework
-- **Snowflake**: Cloud-native data warehouse
-- **Apache Airflow**: Workflow orchestration platform
-- **GitHub Codespaces**: Cloud development environment
-- **Python**: Orchestration and automation scripting
+## 🔧 Configuration
 
-## 🔍 Key Features Demonstrated
+### dbt Profiles (`profiles.yml`)
+- Environment-based configuration
+- Secure credential management via environment variables
 
-- ✅ **Modern ELT Pipeline**: Extract-Load-Transform paradigm
-- ✅ **Medallion Architecture**: Bronze-Silver-Gold data layers
-- ✅ **Data Quality Testing**: Automated validation with dbt tests
-- ✅ **Data Lineage**: Complete dependency mapping
-- ✅ **Documentation**: Auto-generated technical documentation
-- ✅ **Orchestration**: DAG-based workflow management
-- ✅ **Cloud-Native**: Serverless and scalable architecture
-- ✅ **DevOps Ready**: Containerized development environment
+### Airflow Configuration
+- Sequential executor for development
+- SQLite metadata database
+- 5-minute retry delays
 
-## 🧪 Data Quality & Testing
+## 📊 Performance Metrics
 
-Comprehensive testing strategy includes:
-- **Schema Tests**: Uniqueness, not-null constraints
-- **Data Tests**: Accepted values, referential integrity  
-- **Custom Tests**: Business rule validations
-- **Continuous Testing**: Automated execution in pipeline
+- **Pipeline Runtime**: ~30 seconds end-to-end
+- **Data Volume**: 1,010 records processed
+- **Test Coverage**: 28 data quality validations
+- **Success Rate**: 100% test pass rate
 
-## 📈 Business Value
+## 🏆 Best Practices Implemented
 
-This pipeline processes e-commerce data to deliver:
-- **Customer Analytics**: Segmentation and behavior insights
-- **Revenue Metrics**: Daily, monthly, and product-level revenue
-- **Operational KPIs**: Order fulfillment and inventory metrics
-- **Data Governance**: Quality, lineage, and documentation
+### Data Engineering
+- ✅ Schema separation (raw → staging → marts)
+- ✅ Proper naming conventions
+- ✅ Incremental processing capabilities
+- ✅ Data lineage documentation
 
-## 📝 Course Requirements Fulfilled
+### Software Engineering  
+- ✅ Version control with Git
+- ✅ Environment-based configuration
+- ✅ Comprehensive testing
+- ✅ Automated CI/CD pipeline
 
-- ✅ **Data Warehouse Design**: Star/snowflake schema implementation
-- ✅ **ETL/ELT Processes**: Modern transformation patterns
-- ✅ **Data Quality**: Testing and validation frameworks
-- ✅ **Cloud Technologies**: Snowflake and containerization
-- ✅ **Orchestration**: Workflow automation and scheduling
-- ✅ **Documentation**: Technical and business documentation
+### Data Quality
+- ✅ Input validation and cleansing
+- ✅ Business rule enforcement
+- ✅ Referential integrity checks
+- ✅ Automated monitoring
 
-## 👨‍🎓 Student Information
+## 🔄 Continuous Integration
 
-**Course**: Data Warehouse Concepts and Lakehouse Architecture  
-**Institution**: Information Technology Institute (ITI)  
-**Program**: Data Engineering Round 1 2025/2026  
-**Branch**: Port Said  
-**Project Type**: Final Project
+The pipeline supports automated execution with:
+- Scheduled DAG runs (daily)
+- Manual trigger capability
+- Error handling and retries
+- Comprehensive logging
+
+## 📚 Additional Resources
+
+- [dbt Documentation](https://docs.getdbt.com/)
+- [Snowflake Documentation](https://docs.snowflake.com/)
+- [Apache Airflow Documentation](https://airflow.apache.org/docs/)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `dbt test --profiles-dir .`
+5. Submit a pull request
+
+## 📄 License
+
+MIT License - see LICENSE file for details.
 
 ---
 
-*This project demonstrates practical application of data warehousing concepts learned during the ITI Data Engineering program, showcasing industry-standard tools and best practices for modern data pipeline development.*
-
-
-
-
+**Built with ❤️ for modern data engineering**

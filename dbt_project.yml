@@ -17,6 +17,10 @@ models:
   dbt_snowflake_airflow_etl_pipeline:
     example:
       Staging:
-        +materialized: view
+        +materialized: table
       marts:
         +materialized: table
+
+seeds:
+  dbt_snowflake_airflow_etl_pipeline:
+    +schema: raw
