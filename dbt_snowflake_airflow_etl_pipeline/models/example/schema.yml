@@ -1,60 +1,34 @@
 
 version: 2
 
-# Sources - Define your raw data tables in Snowflake
 sources:
   - name: finance_raw
-    description: "Raw finance data from Snowflake finance_db"
+    description: "Raw finance data from Snowflake"
     database: finance_db
     schema: raw
     tables:
-
       - name: orders
-        description: "Raw orders data"
         columns:
           - name: id
-            description: "Unique order identifier"
           - name: customer_id
-            description: "Customer identifier"
           - name: order_date
-            description: "Date of order"
           - name: status
-            description: "Order status"
-
       - name: customers
-        description: "Raw customers data"
         columns:
           - name: id
-            description: "Unique customer identifier"
           - name: name
-            description: "Customer name"
           - name: email
-            description: "Customer email"
           - name: country
-            description: "Customer country"
-
       - name: products
-        description: "Raw products data"
         columns:
           - name: id
-            description: "Unique product identifier"
           - name: name
-            description: "Product name"
           - name: category
-            description: "Product category"
           - name: price
-            description: "Product price"
-
       - name: order_items
-        description: "Raw order items data"
         columns:
           - name: id
-            description: "Unique order item identifier"
           - name: order_id
-            description: "Order identifier"
           - name: product_id
-            description: "Product identifier"
           - name: quantity
-            description: "Item quantity"
           - name: unit_price
-            description: "Unit price"

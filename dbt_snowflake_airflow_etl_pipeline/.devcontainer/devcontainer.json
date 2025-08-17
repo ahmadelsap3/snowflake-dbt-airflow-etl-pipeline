@@ -4,9 +4,7 @@
   
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "18"
-    }
+    "ghcr.io/devcontainers/features/node:1": {"version": "18"}
   },
   
   "containerEnv": {
@@ -20,7 +18,6 @@
   },
   
   "postCreateCommand": "pip install -r requirements.txt",
-  
   "forwardPorts": [8080, 5432, 6379],
   
   "portsAttributes": {
