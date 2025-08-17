@@ -1,13 +1,13 @@
 dbt_snowflake_airflow_etl_pipeline:
   outputs:
     dev:
-      account: ACHAMLP-CK87481
-      database: finance_db
+      account: YOUR_SNOWFLAKE_ACCOUNT  # e.g., xy12345.us-east-1
+      database: YOUR_DATABASE_NAME    # e.g., finance_db
       role: ACCOUNTADMIN
-      schema: raw
+      schema: YOUR_SCHEMA_NAME       # e.g., raw
       threads: 4
       type: snowflake
-      user: AHMEDELSAB3
-      warehouse: FINANCE_WH
-      password: "KYer.He9t.A9pGB"
+      user: YOUR_SNOWFLAKE_USERNAME
+      warehouse: YOUR_WAREHOUSE_NAME # e.g., compute_wh
+      password: "YOUR_SNOWFLAKE_PASSWORD"
   target: dev

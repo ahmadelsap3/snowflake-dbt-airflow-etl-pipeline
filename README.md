@@ -80,8 +80,9 @@ cd dbt-snowflake-airflow-etl-pipeline
 ./setup_codespaces.sh
 ```
 
-### 3. Configure Snowflake
+### 3. Configure Snowflake Connection
 
+**Step 1: Environment Variables**
 Update `snowflake_env.sh` with your credentials:
 ```bash
 export SNOWFLAKE_USER="your_username"
@@ -89,6 +90,40 @@ export SNOWFLAKE_PASSWORD="your_password"
 export SNOWFLAKE_ACCOUNT="your_account_identifier"
 export SNOWFLAKE_WAREHOUSE="your_warehouse"
 export SNOWFLAKE_DATABASE="your_database"
+```
+
+**Step 2: dbt Profile**
+Copy and configure the dbt profile:
+```bash
+# Copy the template
+cp profiles_template.yml ~/.dbt/profiles.yml
+
+# Edit with your Snowflake credentials
+nano ~/.dbt/profiles.yml
+```
+
+Update the profile with your actual Snowflake connection details:
+```yaml
+dbt_snowflake_airflow_etl_pipeline:
+  outputs:
+    dev:
+      account: YOUR_SNOWFLAKE_ACCOUNT  # e.g., xy12345.us-east-1
+      database: YOUR_DATABASE_NAME    # e.g., finance_db
+      role: ACCOUNTADMIN
+      schema: YOUR_SCHEMA_NAME       # e.g., raw
+      threads: 4
+      type: snowflake
+      user: YOUR_SNOWFLAKE_USERNAME
+      warehouse: YOUR_WAREHOUSE_NAME # e.g., compute_wh
+      password: "YOUR_SNOWFLAKE_PASSWORD"
+  target: dev
+```
+
+**Step 3: Test Connection**
+```bash
+# Test dbt connection
+source .venv/bin/activate
+dbt debug
 ```
 
 ### 4. Start Services
@@ -218,7 +253,60 @@ dbt test --select test_type:relationships --profiles-dir .
 - SQLite metadata database
 - 5-minute retry delays
 
-## 📊 Performance Metrics
+## � Troubleshooting
+
+### Common Issues
+
+**1. "Could not find profile named 'dbt_snowflake_airflow_etl_pipeline'"**
+```bash
+# Solution: Configure dbt profile
+cp profiles_template.yml ~/.dbt/profiles.yml
+# Edit ~/.dbt/profiles.yml with your Snowflake credentials
+dbt debug  # Test connection
+```
+
+**2. "Connection failed" or Snowflake authentication errors**
+```bash
+# Check your credentials in both files:
+nano snowflake_env.sh      # Environment variables
+nano ~/.dbt/profiles.yml   # dbt profile
+
+# Test connection
+source snowflake_env.sh
+dbt debug
+```
+
+**3. "Schema not found" or permission errors**
+```bash
+# Ensure your Snowflake user has proper permissions:
+# - CREATE SCHEMA on database
+# - CREATE TABLE on schemas  
+# - SELECT/INSERT/UPDATE/DELETE on tables
+```
+
+**4. Airflow DAG not appearing**
+```bash
+# Check DAG syntax
+python dags/advanced_dbt_snowflake_dag.py
+
+# Restart Airflow services
+./start_airflow_codespaces.sh
+```
+
+### Debug Commands
+```bash
+# Test dbt models individually
+dbt run --models stg_customers
+dbt test --models stg_customers
+
+# Check Airflow configuration
+airflow config list
+
+# View detailed logs
+tail -f airflow_home/logs/scheduler/latest
+```
+
+## �📊 Performance Metrics
 
 - **Pipeline Runtime**: ~30 seconds end-to-end
 - **Data Volume**: 1,010 records processed
