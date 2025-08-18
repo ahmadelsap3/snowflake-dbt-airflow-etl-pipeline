@@ -34,3 +34,48 @@ profiles.yml
 temp_repo/
 *.tmp
 *.log
+# Test files and directories
+test/
+tests/
+*_test.*
+*.test.*
+test_*.*
+
+# Python test cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# dbt specific
+target/
+dbt_packages/
+dbt_modules/
+logs/
+
+# Airflow specific
+airflow_home/
+airflow.db
+airflow.cfg
+webserver_config.py
+*.pid
+
+# Environment variables and secrets
+.env
+*.env
+.env.*
+credentials.yml
+profiles.yml
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
