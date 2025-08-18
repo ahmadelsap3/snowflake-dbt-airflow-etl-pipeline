@@ -306,13 +306,6 @@ airflow config list
 tail -f airflow_home/logs/scheduler/latest
 ```
 
-## 📊 Performance Metrics
-
-- **Pipeline Runtime**: ~30 seconds end-to-end
-- **Data Volume**: 1,010 records processed
-- **Test Coverage**: 28 data quality validations
-- **Success Rate**: 100% test pass rate
-
 ## 🏆 Best Practices Implemented
 
 ### Data Engineering
@@ -320,12 +313,6 @@ tail -f airflow_home/logs/scheduler/latest
 - ✅ Proper naming conventions
 - ✅ Incremental processing capabilities
 - ✅ Data lineage documentation
-
-### Software Engineering  
-- ✅ Version control with Git
-- ✅ Environment-based configuration
-- ✅ Comprehensive testing
-- ✅ Automated CI/CD pipeline
 
 ### Data Quality
 - ✅ Input validation and cleansing
@@ -341,12 +328,6 @@ The pipeline supports automated execution with:
 - Error handling and retries
 - Comprehensive logging
 
-## 📚 Additional Resources
-
-- [dbt Documentation](https://docs.getdbt.com/)
-- [Snowflake Documentation](https://docs.snowflake.com/)
-- [Apache Airflow Documentation](https://airflow.apache.org/docs/)
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -354,10 +335,6 @@ The pipeline supports automated execution with:
 3. Make your changes
 4. Run tests: `dbt test --profiles-dir .`
 5. Submit a pull request
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
 
 ---
 
