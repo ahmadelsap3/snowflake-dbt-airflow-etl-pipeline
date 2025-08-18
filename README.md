@@ -306,7 +306,7 @@ airflow config list
 tail -f airflow_home/logs/scheduler/latest
 ```
 
-## �📊 Performance Metrics
+## 📊 Performance Metrics
 
 - **Pipeline Runtime**: ~30 seconds end-to-end
 - **Data Volume**: 1,010 records processed
