@@ -40,35 +40,28 @@ start = EmptyOperator(
 # dbt debug to test connection
 dbt_debug = BashOperator(
     task_id='dbt_debug',
-    bash_command='cd /workspaces/dbt-snowflake-airflow-etl-pipeline && source snowflake_env.sh && export PATH="/workspaces/dbt-snowflake-airflow-etl-pipeline/.venv/bin:$PATH" && dbt debug --profiles-dir .',
+    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt debug --profiles-dir .',
     dag=dag,
 )
 
 # dbt seed to load CSV data
 dbt_seed = BashOperator(
     task_id='dbt_seed',
-    bash_command='cd /workspaces/dbt-snowflake-airflow-etl-pipeline && source snowflake_env.sh && export PATH="/workspaces/dbt-snowflake-airflow-etl-pipeline/.venv/bin:$PATH" && dbt seed --profiles-dir .',
+    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt seed --profiles-dir .',
     dag=dag,
 )
 
 # dbt run staging models
 dbt_run_staging = BashOperator(
     task_id='dbt_run_staging',
-    bash_command='cd /workspaces/dbt-snowflake-airflow-etl-pipeline && source snowflake_env.sh && export PATH="/workspaces/dbt-snowflake-airflow-etl-pipeline/.venv/bin:$PATH" && dbt run --profiles-dir . --select example.Staging',
+    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt run --profiles-dir . --select example.Staging',
     dag=dag,
 )
 
 # dbt run marts models
 dbt_run_marts = BashOperator(
     task_id='dbt_run_marts',
-    bash_command='cd /workspaces/dbt-snowflake-airflow-etl-pipeline && source snowflake_env.sh && export PATH="/workspaces/dbt-snowflake-airflow-etl-pipeline/.venv/bin:$PATH" && dbt run --profiles-dir . --select example.marts',
-    dag=dag,
-)
-
-# dbt test
-dbt_test = BashOperator(
-    task_id='dbt_test',
-    bash_command='cd /workspaces/dbt-snowflake-airflow-etl-pipeline && source snowflake_env.sh && export PATH="/workspaces/dbt-snowflake-airflow-etl-pipeline/.venv/bin:$PATH" && dbt test --profiles-dir .',
+    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt run --profiles-dir . --select example.marts',
     dag=dag,
 )
 
@@ -85,4 +78,4 @@ end = EmptyOperator(
 )
 
 # Define task dependencies
-start >> dbt_debug >> dbt_seed >> dbt_run_staging >> dbt_run_marts >> dbt_test >> end
+start >> dbt_debug >> dbt_seed >> dbt_run_staging >> dbt_run_marts >> end

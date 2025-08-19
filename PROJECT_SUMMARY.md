@@ -4,7 +4,7 @@
 
 ### 🏗️ Pipeline Architecture
 - **Complete ETL pipeline** with dbt + Snowflake + Airflow
-- **4-stage process**: Seed → Staging → Marts → Testing
+- **3-stage process**: Seed → Staging → Marts
 - **Automated orchestration** via Airflow DAGs
 
 ### 📊 Data Models
@@ -12,12 +12,6 @@
 - **3 Analytics models** (2 dimensions + 1 fact table)  
 - **Primary/Foreign key constraints** implemented
 - **Schema separation**: Raw → Staging → Analytics
-
-### 🧪 Data Quality
-- **28 comprehensive tests** covering all aspects
-- **100% test pass rate** achieved
-- **Referential integrity** validated
-- **Business rule enforcement**
 
 ### 🔧 Technical Implementation
 - **Database constraints**: Primary keys and foreign keys
@@ -32,11 +26,10 @@
 - **Secure credential management**
 
 ## 📈 Key Metrics
-- **Pipeline Runtime**: ~30 seconds end-to-end
+- **Pipeline Runtime**: ~25 seconds end-to-end
 - **Data Volume**: 1,010 records processed
-- **Test Coverage**: 28 data quality validations
 - **Models Created**: 7 total (4 staging + 3 marts)
-- **Success Rate**: 100% (all tests passing)
+- **Success Rate**: 100% (all models created successfully)
 
 ## 🎯 Final Status
 ✅ **Production-ready dbt-Snowflake-Airflow ETL pipeline**

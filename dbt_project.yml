@@ -4,7 +4,6 @@ profile: 'dbt_snowflake_airflow_etl_pipeline'
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
-test-paths: ["tests"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]

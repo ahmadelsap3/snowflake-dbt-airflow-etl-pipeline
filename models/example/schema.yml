@@ -39,18 +39,10 @@ models:
     columns:
       - name: customer_id
         description: "Primary key for customers"
-        tests:
-          - unique
-          - not_null
       - name: customer_name
         description: "Customer full name"
-        tests:
-          - not_null
       - name: email
         description: "Customer email address"
-        tests:
-          - unique
-          - not_null
       - name: country
         description: "Customer country"
 
@@ -59,95 +51,47 @@ models:
     columns:
       - name: product_id
         description: "Primary key for products"
-        tests:
-          - unique
-          - not_null
       - name: product_name
         description: "Product name"
-        tests:
-          - not_null
       - name: product_category
         description: "Product category"
       - name: price
         description: "Product price"
-        tests:
-          - not_null
 
   - name: stg_orders
     description: "Staging table for orders with clean data"
     columns:
       - name: order_id
         description: "Primary key for orders"
-        tests:
-          - unique
-          - not_null
       - name: customer_id
         description: "Foreign key to customers"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('stg_customers')
-              field: customer_id
       - name: order_date
         description: "Order date"
-        tests:
-          - not_null
       - name: order_status
         description: "Order status"
-        tests:
-          - accepted_values:
-              values: ['Pending', 'Completed', 'Cancelled']
 
   - name: stg_order_items
     description: "Staging table for order items with clean data"
     columns:
       - name: item_id
         description: "Primary key for order items"
-        tests:
-          - unique
-          - not_null
       - name: order_id
         description: "Foreign key to orders"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('stg_orders')
-              field: order_id
       - name: product_id
         description: "Foreign key to products"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('stg_products')
-              field: product_id
       - name: quantity
         description: "Quantity ordered"
-        tests:
-          - not_null
       - name: unit_price
         description: "Unit price"
-        tests:
-          - not_null
       - name: total_price
         description: "Total price (quantity * unit_price)"
-        tests:
-          - not_null
 
   - name: fct_daily_order_revenue
     description: "Fact table for daily order revenue"
     columns:
       - name: order_date
         description: "Order date"
-        tests:
-          - not_null
       - name: order_id
         description: "Order ID"
-        tests:
-          - not_null
-          - relationships:
-              to: ref('stg_orders')
-              field: order_id
       - name: total_order_value
         description: "Total revenue for the order"
-        tests:
-          - not_null

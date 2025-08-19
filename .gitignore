@@ -67,8 +67,10 @@ webserver_config.py
 .env
 *.env
 .env.*
+!.env.example
 credentials.yml
 profiles.yml
+snowflake_env.sh
 
 # IDE files
 .idea/
