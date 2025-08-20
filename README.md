@@ -4,6 +4,8 @@ This project demonstrates a modern data engineering pipeline using dbt for trans
 
 ## Architecture
 
+![Architecture Diagram](screenshots/architecture.jpg)
+
 ```
 Raw Data (Seeds) → Staging Layer → Analytics Layer (Marts)
      ↓                ↓               ↓
@@ -41,7 +43,9 @@ Raw Data (Seeds) → Staging Layer → Analytics Layer (Marts)
 ## Technology Stack
 
 - **dbt Core**: Data transformation and modeling
+  ![dbt](screenshots/dbt.jpeg)
 - **Snowflake**: Cloud data warehouse
+  ![Snowflake](screenshots/snowflake.jpeg)
 - **Apache Airflow**: Workflow orchestration
 - **Docker**: Containerization
 
