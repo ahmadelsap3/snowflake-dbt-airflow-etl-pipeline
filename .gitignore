@@ -1,3 +1,6 @@
+# Snowflake credentials
+snowflake_env.sh
+.dbt/profiles.yml
 
 target/
 dbt_packages/

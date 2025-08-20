@@ -10,4 +10,4 @@ SELECT
     name as product_name,
     category,
     price
-FROM {{ ref('products') }}
+FROM {{ source('finance_raw', 'products') }}

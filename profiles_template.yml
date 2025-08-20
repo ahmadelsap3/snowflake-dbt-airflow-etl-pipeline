@@ -4,7 +4,7 @@ dbt_snowflake_airflow_etl_pipeline:
       account: YOUR_SNOWFLAKE_ACCOUNT  # e.g., xy12345.us-east-1
       database: YOUR_DATABASE_NAME    # e.g., finance_db
       role: ACCOUNTADMIN
-      schema: YOUR_SCHEMA_NAME       # e.g., raw
+      schema: RAW_RAW                # Important: Use RAW_RAW to match seed schema
       threads: 4
       type: snowflake
       user: YOUR_SNOWFLAKE_USERNAME

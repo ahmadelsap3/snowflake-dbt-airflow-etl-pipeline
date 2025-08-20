@@ -5,7 +5,7 @@ sources:
   - name: finance_raw
     description: "Raw finance data from Snowflake"
     database: FINANCE_DB
-    schema: DBT_DEV_RAW_RAW
+    schema: RAW_RAW
     tables:
       - name: orders
         columns:

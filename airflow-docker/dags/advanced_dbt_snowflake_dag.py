@@ -40,28 +40,28 @@ start = EmptyOperator(
 # dbt debug to test connection
 dbt_debug = BashOperator(
     task_id='dbt_debug',
-    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt debug --profiles-dir .',
+    bash_command='cd /opt/airflow/project && dbt debug --profiles-dir /opt/airflow/project/.dbt',
     dag=dag,
 )
 
 # dbt seed to load CSV data
 dbt_seed = BashOperator(
     task_id='dbt_seed',
-    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt seed --profiles-dir .',
+    bash_command='cd /opt/airflow/project && dbt seed --profiles-dir /opt/airflow/project/.dbt',
     dag=dag,
 )
 
 # dbt run staging models
 dbt_run_staging = BashOperator(
     task_id='dbt_run_staging',
-    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt run --profiles-dir . --select example.Staging',
+    bash_command='cd /opt/airflow/project && dbt run --profiles-dir /opt/airflow/project/.dbt --select example.Staging',
     dag=dag,
 )
 
 # dbt run marts models
 dbt_run_marts = BashOperator(
     task_id='dbt_run_marts',
-    bash_command='cd ${AIRFLOW_HOME}/../ && source snowflake_env.sh && dbt run --profiles-dir . --select example.marts',
+    bash_command='cd /opt/airflow/project && dbt run --profiles-dir /opt/airflow/project/.dbt --select example.marts',
     dag=dag,
 )
 
